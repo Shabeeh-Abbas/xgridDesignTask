@@ -1,0 +1,31 @@
+Repositories:
+- Users Table:
+      - id(PK)
+      - name
+      - email
+- Friends Table (Associative/Intermidiate Table):
+      - id(PK)
+      - userId(FK)
+      - friendsID(FK)
+- Activities Table:
+      - id(PK)
+      - userId
+      - activityType
+      - dateTime
+      - textData
+- UploadedFiles Table:
+      - id(PK)
+      - activityId(FK)
+      - fileExtension
+      - filePath
+
+API's:
+- publishNewsFeed ( Long userId, String activityType, MultipartFile[] uploadFiles) - this API will be responsible for the saving of an activity and conditionally uploading of files
+        - It will run a query in the Activities Table to save the userId activityType (which will be an Enum) LocalDateTime.now() would provide the current datetime and any textData as String
+        - Secondly if their are files uploaded files it will upload the files based on the obtained activityIds
+- getNewsFeed ( Long userId ) - this API will be responsible for getting the by the following steps
+      - It will query the Friends Table  by using the userId to obtain the friends Ids 
+      - By utilizing the List of Friends Ids it will query the activities table for getting the list of activities by descending datetime
+      - It will query the Uploaded files Table against the activity Ids 
+      - Lastly all data will be set in Activity DTO and a List of activities will be obtained which will be returned the the client
+      
